@@ -6,41 +6,37 @@ import Table from '@/components/ui/Table';
 import Pagination from '@/components/ui/Pagination'; // Make sure this is the updated minimal version
 import { useState, useEffect } from 'react';
 import CreateUserModal from '@/components/ui/CreateUserModal';
+import { Pencil, Trash2 } from 'lucide-react';
 
 
 const mockUsers = [
   // Your 15 mock users...
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Moderator', status: 'Active' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Moderator', status: 'Active' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Moderator', status: 'Inactive' },
-  { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Moderator', status: 'Active' },
-  { id: 5, name: 'Charlie Lee', email: 'charlie@example.com', role: 'Moderator', status: 'Active' },
-  { id: 6, name: 'David Wilson', email:'david@example.com', role: 'Moderator', status: 'Active' },
-  { id: 7, name: 'Eva Davis', email:'eva@example.com', role: 'Hatchery Member', status: 'Inactive' },
-  { id: 8, name: 'Frank Miller', email: 'frank@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 9, name: 'Grace Taylor', email: 'grace@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 10, name: 'Henry Anderson', email: 'henry@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 11, name: 'Ivy Thomas', email: 'ivy@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 12, name: 'Jack White', email: 'jack@example.com', role: 'Hatchery Member', status: 'Inactive' },
-  { id: 13, name: 'Kate Green', email: 'kate@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Moderator', status: 'Active' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Moderator', status: 'Active' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Moderator', status: 'Inactive' },
-  { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Moderator', status: 'Active' },
-  { id: 5, name: 'Charlie Lee', email: 'charlie@example.com', role: 'Moderator', status: 'Active' },
-  { id: 6, name: 'David Wilson', email: 'david@example.com', role: 'Moderator', status: 'Active' },
-  { id: 7, name: 'Eva Davis', email: 'eva@example.com', role: 'Hatchery Member', status: 'Inactive' },
-  { id: 8, name: 'Frank Miller', email: 'frank@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 9, name: 'Grace Taylor', email: 'grace@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 10, name: 'Henry Anderson', email: 'henry@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 11, name: 'Ivy Thomas', email: 'ivy@example.com', role: 'Hatchery Member', status: 'Active' },
-  { id: 12, name: 'Jack White', email: 'jack@example.com', role: 'Hatchery Member', status: 'Inactive' },
-  { id: 13, name: 'Kate Green', email: 'kate@example.com', role: 'Hatchery Member', status: 'Active' },
+  
+  { id: 1, name: 'John Doe', email: 'john1@example.com', role: 'Moderator', status: 'Active' },
+  { id: 2, name: 'Jane Smith', email: 'jane1@example.com', role: 'Moderator', status: 'Active' },
+  { id: 3, name: 'Bob Johnson', email: 'bob1@example.com', role: 'Moderator', status: 'Inactive' },
+  { id: 4, name: 'Alice Brown', email: 'alice1@example.com', role: 'Moderator', status: 'Active' },
+  { id: 5, name: 'Charlie Lee', email: 'charlie1@example.com', role: 'Moderator', status: 'Active' },
+  { id: 6, name: 'David Wilson', email: 'david1@example.com', role: 'Moderator', status: 'Active' },
+
+  { id: 7, name: 'Eva Davis', email: 'eva1@example.com', role: 'Hatchery Member', status: 'Inactive' },
+  { id: 8, name: 'Frank Miller', email: 'frank1@example.com', role: 'Hatchery Member', status: 'Active' },
+  { id: 9, name: 'Grace Taylor', email: 'grace1@example.com', role: 'Hatchery Member', status: 'Active' },
+  { id: 10, name: 'Henry Anderson', email: 'henry1@example.com', role: 'Hatchery Member', status: 'Active' },
+  { id: 11, name: 'Ivy Thomas', email: 'ivy1@example.com', role: 'Hatchery Member', status: 'Active' },
+  { id: 12, name: 'Jack White', email: 'jack1@example.com', role: 'Hatchery Member', status: 'Inactive' },
+  { id: 13, name: 'Kate Green', email: 'kate1@example.com', role: 'Hatchery Member', status: 'Active' },
+
+  { id: 14, name: 'John Doe', email: 'john2@example.com', role: 'Moderator', status: 'Active' },
+  { id: 15, name: 'Jane Smith', email: 'jane2@example.com', role: 'Moderator', status: 'Active' },
+  { id: 16, name: 'Bob Johnson', email: 'bob2@example.com', role: 'Moderator', status: 'Inactive' },
+];
+
 
 
   // ... add more to reach ~15 items for multiple pages
   // (you already have duplicates — that's fine for testing)
-];
+
 
 export default function UserManagementPage() {
   const [users] = useState(mockUsers);
@@ -117,6 +113,49 @@ export default function UserManagementPage() {
             <Table
               data={paginatedUsers}
               columns={['ID', 'Name', 'Email', 'Role', 'Status', 'Actions']}
+              renderCell={(row, column) => {
+                switch (column) {
+                  case 'ID':
+                    return row.id;
+                  case 'Name':
+                    return row.name;
+                  case 'Email':
+                    return row.email;
+                  case 'Role':
+                    return row.role;
+                  case 'Status':
+                    return (
+                      <span
+                        className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${
+                          row.status === 'Active'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {row.status}
+                      </span>
+                    );
+                  case 'Actions':
+                    return (
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => alert(`Edit user ${row.id}`)}
+                          className="text-gray-600 hover:text-blue-600 transition"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => alert(`Delete user ${row.id}`)}
+                          className="text-gray-600 hover:text-red-600 transition"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    );
+                  default:
+                    return '-';
+                }
+              }}
             />
 
             {/* Minimal Pagination - Centered, Purple Current Page */}

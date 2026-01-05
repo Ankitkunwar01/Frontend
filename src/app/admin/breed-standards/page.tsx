@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button';
 import Pagination from '@/components/ui/Pagination';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import CreateBreedModal from '@/components/ui/CreateBreedModal';
 
 const breedStandards = [
   { breed: 'Breed1', fertility: '80%', hatchability: '82%', mortality: '4%', healthy: '95%' },
@@ -22,6 +23,17 @@ const breedStandards = [
 ];
 
 export default function BreedStandardsPage() {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [breeds, setBreeds] = useState(breedStandards);
+
+  const handleCreateBreed = (data: any) => {
+    console.log('New breed created:', data);
+    // Add to your breeds array
+    setBreeds([...breeds, { ...data, breed: data.breedName }]);
+  };
+
+
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 5; // You can change this to 10 if preferred
 
@@ -31,6 +43,7 @@ export default function BreedStandardsPage() {
   const paginatedBreeds = breedStandards.slice(startIndex, endIndex);
 
   const totalItems = breedStandards.length;
+  
 
   return (
     <DashboardLayout>
@@ -44,9 +57,15 @@ export default function BreedStandardsPage() {
             </p>
           </div>
 
-          <Button className="bg-black text-white hover:bg-gray-800 flex items-center gap-2">
-            <span className="text-lg">+</span> Add Breed
-          </Button>
+         {/* Your existing page content */}
+      <Button onClick={() => setIsModalOpen(true)}>
+        <span className="text-lg">+</span> Add Breed
+      </Button>
+      <CreateBreedModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreate={handleCreateBreed}
+      />
         </div>
 
         {/* Main Card */}

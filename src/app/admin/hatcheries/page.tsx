@@ -3,30 +3,153 @@
 import DashboardLayout from '@/components/admin/DashboardLayout';
 import Button from '@/components/ui/Button';
 import Table from '@/components/ui/Table';
+import Pagination from '@/components/ui/Pagination';
+import { Pencil, Trash2, Eye } from 'lucide-react';
+import { useState } from 'react';
 
 const hatcheries = [
-  { id: 1, name: 'Sunrise Hatchery', location: 'California', flocks: 12, status: 'Active' },
-  { id: 2, name: 'Golden Eggs Farm', location: 'Texas', flocks: 8, status: 'Active' },
-  { id: 3, name: 'Morning Bird Co.', location: 'Florida', flocks: 15, status: 'Active' },
+  {
+    id: 1,
+    name: 'Ram Poultry Farm',
+    address: 'Srijananagar, Bhaktapur',
+    registeredNumber: '123-123-412',
+    owner: 'Ram doe',
+    contact: '9800000000',
+    renewalStatus: 'Active',
+  },
+  {
+    id: 2,
+    name: 'Sam Poultry Farm',
+    address: 'Kathmandu -5',
+    registeredNumber: '1234-2324-2',
+    owner: 'John doe',
+    contact: '9700000000',
+    renewalStatus: 'Active',
+  },
+  {
+    id: 3,
+    name: 'Poultry Farm',
+    address: 'Gongabu-3, Ktm',
+    registeredNumber: '5533-22-1-11',
+    owner: 'Kel fro',
+    contact: '9741000000',
+    renewalStatus: 'Active',
+  },
+  {
+    id: 4,
+    name: 'Poultry Farm',
+    address: 'Sanepa, Laliipur',
+    registeredNumber: '123-233-222',
+    owner: 'Mani go',
+    contact: '9841000000',
+    renewalStatus: 'Inactive',
+  },
 ];
 
 export default function HatcheriesPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [clickedButton, setClickedButton] = useState(null);
+  const ITEMS_PER_PAGE = 10;
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedData = hatcheries.slice(startIndex, endIndex);
+  const totalItems = hatcheries.length;
+
+
+
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
+      <div className="space-y-8">
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">All Hatcheries</h2>
-            <p className="text-gray-600">Manage hatchery locations and details</p>
+            <h2 className="text-2xl font-bold text-gray-900">All Hatcheries</h2>
+            <p className="text-gray-600 mt-1">View all registered hatcheries in the system</p>
           </div>
-          <Button>Add Hatchery</Button>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+
+              className="bg-black text-white hover:bg-gray-800"
+            >
+              + Add Hatchery Farm
+            </Button>
+            <Button
+              className="bg-black text-white hover:bg-gray-800"
+
+            >
+              + Add Flock Details
+            </Button>
+          </div>
         </div>
+
         
-        <div className="card">
-          <Table 
-            data={hatcheries} 
-            columns={['ID', 'Name', 'Location', 'Flock Count', 'Status', 'Actions']}
-          />
+        {/* Table Card */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="p-6">
+            <Table
+              data={paginatedData}
+              columns={['Name', 'Address', 'Registered number', 'Owner', 'Contact', 'Renewal Status', 'Action']}
+              renderCell={(row, column) => {
+                switch (column) {
+                  case 'Name':
+                    return <span className="font-medium text-gray-900">{row.name}</span>;
+                  case 'Address':
+                    return <span className="text-gray-700">{row.address}</span>;
+                  case 'Registered number':
+                    return <span className="font-mono text-sm text-gray-600">{row.registeredNumber}</span>;
+                  case 'Owner':
+                    return <span className="text-gray-700">{row.owner}</span>;
+                  case 'Contact':
+                    return <span className="text-gray-700">{row.contact}</span>;
+                  case 'Renewal Status':
+                    return (
+                      <span
+                        className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${row.renewalStatus === 'Active'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-red-100 text-red-800'
+                          }`}
+                      >
+                        {row.renewalStatus}
+                      </span>
+                    );
+                  case 'Action':
+                    return (
+                      <div className="flex items-center gap-3">
+                        <button className="text-blue-600 hover:text-blue-800 transition">
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button className="text-gray-600 hover:text-blue-600 transition">
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button className="text-gray-600 hover:text-red-600 transition">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    );
+                  default:
+                    return '-';
+                }
+              }}
+            />
+
+            {/* Pagination - only show if there are more than ITEMS_PER_PAGE items */}
+            {totalItems > ITEMS_PER_PAGE && (
+              <div className="mt-8 flex flex-col items-center gap-4">
+                <Pagination
+                  currentPage={currentPage}
+                  totalItems={totalItems}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  onPageChange={setCurrentPage}
+                />
+
+                <p className="text-sm text-gray-500">
+                  Showing {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems} hatcheries
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </DashboardLayout>

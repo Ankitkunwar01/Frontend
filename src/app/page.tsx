@@ -9,6 +9,7 @@ export default function DashboardPage() {
           <OverviewCards />
         </div>
         
+        
         {/* Recent Activity Section */}
         <div className="card">
           <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
