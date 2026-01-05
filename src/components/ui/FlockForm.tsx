@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { X } from 'lucide-react';
 
 interface FlockFormProps {
@@ -10,7 +10,7 @@ interface FlockFormProps {
 }
 
 export default function FlockForm({ isOpen, onClose }: FlockFormProps) {
-  if (!isOpen) return null;
+  
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -26,6 +26,7 @@ export default function FlockForm({ isOpen, onClose }: FlockFormProps) {
     console.log('Flock details submitted');
     onClose();
   };
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">

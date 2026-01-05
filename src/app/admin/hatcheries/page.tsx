@@ -8,6 +8,7 @@ import { Pencil, Trash2, Eye } from 'lucide-react';
 import { useState } from 'react';
 import HatcheryForm from '@/components/ui/HatcheryForm';
 import FlockForm from '@/components/ui/FlockForm';
+import View from '@/components/ui/View';
 
 // ... your hatcheries data array remains the same
 const hatcheries = [
@@ -124,7 +125,10 @@ export default function HatcheriesPage() {
                     return (
                       <div className="flex items-center gap-3">
                         <button className="text-blue-600 hover:text-blue-800 transition">
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4" 
+              
+                          
+                          />
                         </button>
                         <button className="text-gray-600 hover:text-blue-600 transition">
                           <Pencil className="h-4 w-4" />
