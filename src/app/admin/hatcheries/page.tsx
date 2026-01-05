@@ -6,7 +6,10 @@ import Table from '@/components/ui/Table';
 import Pagination from '@/components/ui/Pagination';
 import { Pencil, Trash2, Eye } from 'lucide-react';
 import { useState } from 'react';
+import HatcheryForm from '@/components/ui/HatcheryForm';
+import FlockForm from '@/components/ui/FlockForm';
 
+// ... your hatcheries data array remains the same
 const hatcheries = [
   {
     id: 1,
@@ -48,15 +51,16 @@ const hatcheries = [
 
 export default function HatcheriesPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [clickedButton, setClickedButton] = useState(null);
   const ITEMS_PER_PAGE = 10;
+
+  // Separate states for each modal
+  const [isHatcheryModalOpen, setIsHatcheryModalOpen] = useState(false);
+  const [isFlockModalOpen, setIsFlockModalOpen] = useState(false);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedData = hatcheries.slice(startIndex, endIndex);
   const totalItems = hatcheries.length;
-
-
 
   return (
     <DashboardLayout>
@@ -70,21 +74,21 @@ export default function HatcheriesPage() {
 
           <div className="flex flex-col sm:flex-row gap-3">
             <Button
-
+              onClick={() => setIsHatcheryModalOpen(true)}
               className="bg-black text-white hover:bg-gray-800"
             >
               + Add Hatchery Farm
             </Button>
-            <Button
-              className="bg-black text-white hover:bg-gray-800"
 
+            <Button
+              onClick={() => setIsFlockModalOpen(true)}
+              className="bg-black text-white hover:bg-gray-800"
             >
               + Add Flock Details
             </Button>
           </div>
         </div>
 
-        
         {/* Table Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6">
@@ -92,6 +96,7 @@ export default function HatcheriesPage() {
               data={paginatedData}
               columns={['Name', 'Address', 'Registered number', 'Owner', 'Contact', 'Renewal Status', 'Action']}
               renderCell={(row, column) => {
+                // ... your renderCell logic (unchanged)
                 switch (column) {
                   case 'Name':
                     return <span className="font-medium text-gray-900">{row.name}</span>;
@@ -106,10 +111,11 @@ export default function HatcheriesPage() {
                   case 'Renewal Status':
                     return (
                       <span
-                        className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${row.renewalStatus === 'Active'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                          }`}
+                        className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
+                          row.renewalStatus === 'Active'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
                       >
                         {row.renewalStatus}
                       </span>
@@ -134,7 +140,7 @@ export default function HatcheriesPage() {
               }}
             />
 
-            {/* Pagination - only show if there are more than ITEMS_PER_PAGE items */}
+            {/* Pagination */}
             {totalItems > ITEMS_PER_PAGE && (
               <div className="mt-8 flex flex-col items-center gap-4">
                 <Pagination
@@ -143,7 +149,6 @@ export default function HatcheriesPage() {
                   itemsPerPage={ITEMS_PER_PAGE}
                   onPageChange={setCurrentPage}
                 />
-
                 <p className="text-sm text-gray-500">
                   Showing {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems} hatcheries
                 </p>
@@ -152,6 +157,17 @@ export default function HatcheriesPage() {
           </div>
         </div>
       </div>
+
+      {/* Individual Modals */}
+      <HatcheryForm
+        isOpen={isHatcheryModalOpen}
+        onClose={() => setIsHatcheryModalOpen(false)}
+      />
+
+      <FlockForm
+        isOpen={isFlockModalOpen}
+        onClose={() => setIsFlockModalOpen(false)}
+      />
     </DashboardLayout>
   );
 }
