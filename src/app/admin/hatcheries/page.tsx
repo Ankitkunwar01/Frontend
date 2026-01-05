@@ -9,6 +9,7 @@ import { useState } from 'react';
 import HatcheryForm from '@/components/ui/HatcheryForm';
 import FlockForm from '@/components/ui/FlockForm';
 import View from '@/components/ui/View';
+import { useRouter } from 'next/navigation';
 
 // ... your hatcheries data array remains the same
 const hatcheries = [
@@ -51,6 +52,9 @@ const hatcheries = [
 ];
 
 export default function HatcheriesPage() {
+
+  const [activeTab, setActiveTab] = useState<'hatchery' | 'flocks'>('hatchery');
+
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
 
@@ -62,6 +66,8 @@ export default function HatcheriesPage() {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedData = hatcheries.slice(startIndex, endIndex);
   const totalItems = hatcheries.length;
+  const router = useRouter();
+  
 
   return (
     <DashboardLayout>
@@ -73,7 +79,7 @@ export default function HatcheriesPage() {
             <p className="text-gray-600 mt-1">View all registered hatcheries in the system</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          {/* <div className="flex flex-col sm:flex-row gap-3">
             <Button
               onClick={() => setIsHatcheryModalOpen(true)}
               className="bg-black text-white hover:bg-gray-800"
@@ -87,7 +93,36 @@ export default function HatcheriesPage() {
             >
               + Add Flock Details
             </Button>
+          </div> */}
+          <div className="flex gap-4">
+            <button
+              onClick={() => {
+                setActiveTab('hatchery')
+                setIsHatcheryModalOpen(true)
+              }}
+              className={`px-6 py-2.5 rounded-lg font-medium transition ${
+                activeTab === 'hatchery'
+                  ? 'bg-black text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              + Add Hatchery Farm
+            </button>
+            <button
+              onClick={() => {setActiveTab('flocks')
+                setIsFlockModalOpen(true)}
+              }
+              className={`px-6 py-2.5 rounded-lg font-medium transition ${
+                activeTab === 'flocks'
+                  ? 'bg-black text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+
+            >
+              + Add Flock Details
+            </button>
           </div>
+
         </div>
 
         {/* Table Card */}
@@ -112,11 +147,10 @@ export default function HatcheriesPage() {
                   case 'Renewal Status':
                     return (
                       <span
-                        className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
-                          row.renewalStatus === 'Active'
+                        className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${row.renewalStatus === 'Active'
                             ? 'bg-green-100 text-green-800'
                             : 'bg-red-100 text-red-800'
-                        }`}
+                          }`}
                       >
                         {row.renewalStatus}
                       </span>
@@ -124,11 +158,14 @@ export default function HatcheriesPage() {
                   case 'Action':
                     return (
                       <div className="flex items-center gap-3">
-                        <button className="text-blue-600 hover:text-blue-800 transition">
-                          <Eye className="h-4 w-4" 
-              
-                          
-                          />
+                        <button
+                          onClick={() => router.push(`/admin/hatcheries/${row.id}`)}
+                          className="text-blue-600 hover:text-blue-800 transition"
+                          title="View Details"
+                        >
+
+
+                          <Eye className="h-4 w-4" />
                         </button>
                         <button className="text-gray-600 hover:text-blue-600 transition">
                           <Pencil className="h-4 w-4" />
