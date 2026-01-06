@@ -12,34 +12,55 @@ export default function LoginPage() {
 
   const router = useRouter();
 
+  // Hardcoded demo users with roles (remove/replace in production with real auth)
+  const demoUsers = {
+    'admin@hatchery.com': { password: 'admin123', role: 'admin', name: 'Admin User' },
+    'moderator@hatchery.com': { password: 'mod123', role: 'moderator', name: 'Moderator User' },
+    'hatchery@hatchery.com': { password: 'hatch123', role: 'hatchery_member', name: 'Hatchery Member' },
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Simple demo validation (replace with real auth later)
     if (!email || !password) {
       setError('Please enter both email and password');
       setLoading(false);
       return;
     }
 
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+    // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Hardcoded demo credentials (remove in production!)
-      if (email === 'admin@hatchery.com' && password === 'password') {
-        console.log('Login successful!');
-        router.push('/admin/dashboard');
-      } else {
-        setError('Invalid email or password');
+    const user = demoUsers[email as keyof typeof demoUsers];
+
+    if (user && user.password === password) {
+      // Success! Set role in cookie so middleware can read it
+      document.cookie = `role=${user.role}; path=/; max-age=86400`; // 24 hours
+      document.cookie = `userName=${encodeURIComponent(user.name)}; path=/; max-age=86400`;
+
+      console.log('Login successful:', user.role);
+
+      // Redirect based on role
+      switch (user.role) {
+        case 'admin':
+          router.push('/admin/dashboard');
+          break;
+        case 'moderator':
+          router.push('/moderator/dashboard');
+          break;
+        case 'hatchery_member':
+          router.push('/hatchery/dashboard');
+          break;
+        default:
+          setError('Invalid user role. Please contact administrator.');
       }
-    } catch (err) {
-      setError('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
+    } else {
+      setError('Invalid email or password');
     }
+
+    setLoading(false);
   };
 
   return (
@@ -78,7 +99,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-black sm:text-sm"
-                placeholder="admin@hatchery.com"
+                placeholder="you@hatchery.com"
               />
             </div>
 
@@ -123,8 +144,20 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-600">
-            Demo credentials: <strong>admin@hatchery.com</strong> / <strong>password</strong>
+          {/* Demo Credentials */}
+          <div className="mt-8 space-y-3 text-sm text-gray-600">
+            <p className="font-medium text-gray-800">Demo Accounts:</p>
+            <ul className="space-y-2 text-xs bg-gray-50 p-4 rounded-lg">
+              <li>
+                <strong>Admin:</strong> admin@hatchery.com / <strong>admin123</strong>
+              </li>
+              <li>
+                <strong>Moderator:</strong> moderator@hatchery.com / <strong>mod123</strong>
+              </li>
+              <li>
+                <strong>Hatchery Member:</strong> hatchery@hatchery.com / <strong>hatch123</strong>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

@@ -14,8 +14,7 @@ export default function NavItem({ href, icon: Icon, label }: NavItemProps) {
   const pathname = usePathname();
   
   // Better active state checking
-  const isActive = pathname === href || 
-                  (href === '/admin/overview' && pathname === '/'); // Handle redirect
+  const isActive = pathname === href;
 
   return (
     <Link
