@@ -40,8 +40,9 @@ const navTools = [
  { href: '/admin/manage-notification', icon: Bell, label: 'Manage Notification' },
     { href: '/admin/manage-reports', icon: Info, label: 'Manage Reports' },
 ]
+
 const navAccounts = [
- { href: '/(admin)/my_profile', icon: User, label: 'My Profile' },
+ { href: '/admin/my_profile', icon: User, label: 'My Profile' },
     { href: '/admin/notification', icon: Bell, label: 'Notification' },
     { href: '/admin/submit-reports', icon: Send, label: 'Submit Report' },
 ]
