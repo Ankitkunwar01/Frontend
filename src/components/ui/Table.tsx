@@ -40,11 +40,11 @@ export default function Table({ data, columns, isLoading, renderCell }: TablePro
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 border-t ">
           {data.map((row, rowIndex) => (
             <tr key={row.id || rowIndex} className="hover:bg-gray-50">
               {columns.map((column) => (
-                <td key={column} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td key={column} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-9">
                   {renderCell ? (
                     renderCell(row, column)
                   ) : (
